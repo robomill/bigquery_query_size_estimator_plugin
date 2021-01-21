@@ -14,10 +14,15 @@ class BigQueryDryRun : DumbAwareAction() {
   override fun actionPerformed(event: AnActionEvent) {
     val editor = event.getData(CommonDataKeys.EDITOR)
     if (editor != null) {
-      val queryText = editor.document.text
+      val queryText = if (editor.selectionModel.selectedText != null) {
+        editor.selectionModel.selectedText
+      }
+      else {
+        editor.document.text
+      }
 
       try {
-        val size = queryDryRun(queryText)
+        val size = queryDryRun(queryText!!)
         Notifications.Bus.notify(
           Notification(
             Notifications.SYSTEM_MESSAGES_GROUP_ID, "Query estimation",
