@@ -27,5 +27,6 @@ class SettingsState : PersistentStateComponent<StateModel> {
 }
 
 data class StateModel (
+    var applicationDefaultAuthentication: Boolean = false,
     var keyPath: String = "",
 )
