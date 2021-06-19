@@ -52,7 +52,7 @@ class BigQueryDryRun : DumbAwareAction() {
     private fun queryDryRun(query: String): String {
         val keyPath = SettingsState.getInstance().state?.keyPath
         val applicationDefault = SettingsState.getInstance().state?.applicationDefaultAuthentication
-        val bigquery: BigQuery = if (applicationDefault == true) {
+        val bigquery: BigQuery = if (applicationDefault == false) {
             if (keyPath == null || keyPath == "") {
                 throw Exception("Set GCP service key path in settings:\nFile | Settings | Tools | BigQuery GCP key")
             }
