@@ -48,18 +48,28 @@ class BigQueryDryRun : DumbAwareAction() {
 
   private fun queryDryRun(query: String): String {
     val keyPath = SettingsState.getInstance().state?.keyPath
+    val applicationDefault = SettingsState.getInstance().state?.applicationDefaultAuthentication
 
-    if (keyPath == null || keyPath == "") {
-      throw Exception("Set GCP service key path in settings:\nFile | Settings | Tools | BigQuery GCP key")
+    if (applicationDefault == false && (keyPath == null || keyPath == "")) {
+      throw Exception("Please set the GCP service key path OR the Application Default Credentials " +
+                      " Option in settings:\nFile | Settings | Tools | BigQuery Estimator Settings")
     }
 
-    val credentialsText = File(keyPath).inputStream()
-    val credentials = ServiceAccountCredentials.fromStream(credentialsText)
+    val bigquery: BigQuery = if (applicationDefault == false) {
+      if (keyPath == null || keyPath == "") {
+        throw Exception("Set GCP service key path in settings:\nFile | Settings | Tools | BigQuery Estimator Settings")
+      }
 
-    val bigquery: BigQuery = BigQueryOptions.newBuilder()
-      .setCredentials(credentials)
-      .setProjectId(credentials.projectId)
-      .build().service;
+      val credentialsText = File(keyPath).inputStream()
+      val credentials = ServiceAccountCredentials.fromStream(credentialsText)
+
+      BigQueryOptions.newBuilder()
+        .setCredentials(credentials)
+        .setProjectId(credentials.projectId)
+        .build().service;
+    } else {
+      BigQueryOptions.getDefaultInstance().service
+    }
 
     val queryConfig: QueryJobConfiguration =
       QueryJobConfiguration.newBuilder(query).setDryRun(true).setUseQueryCache(false).build()

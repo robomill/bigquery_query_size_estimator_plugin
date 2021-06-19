@@ -12,6 +12,9 @@
         Shows BigQuery query scanned data estimation and approximate cost.
       </p>
       <p>
+        <i You choose to use a GCP service account key, or the application default credentials picked up via
+        GOOGLE_APPLICATION_CREDENTIALS<i>
+        <br>
         <i>Your GCP service account key is used only to send 'dry run' requests to Google cloud API
         and not sent anywhere else</i>
       </p>
@@ -31,13 +34,13 @@
     <group id="BigQueryEstimate">
       <add-to-group group-id="EditorPopupMenu" anchor="last"/>
       <action id="MyPlugin.Hello" class="net.chakmidlot.jetbrains.bigquery.plugin.BigQueryDryRun"
-              text="BigQuery estimate" description="Estimates BigQuery data scanned"/>
+              text="BigQuery Estimate" description="Estimates BigQuery data scanned"/>
     </group>
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
     <applicationConfigurable parentId="tools" instance="net.chakmidlot.jetbrains.bigquery.plugin.Settings"
-                         id="net.chakmidlot.jetbrains.bigquery.plugin.Settings" displayName="BigQuery GCP key"/>
+                         id="net.chakmidlot.jetbrains.bigquery.plugin.Settings" displayName="BigQuery Estimator Settings"/>
     <applicationService serviceImplementation="net.chakmidlot.jetbrains.bigquery.plugin.SettingsState"/>
   </extensions>
 </idea-plugin>
